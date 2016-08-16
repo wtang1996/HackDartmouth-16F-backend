@@ -9,6 +9,8 @@ router.post('/signin', requireSignin, UserController.signin);
 
 router.post('/signup', UserController.signup);
 
+router.get('/profile', requireAuth, UserController.getUser);
+
 router.get('/', (req, res) => {
   res.json({ message: 'welcome to our blog api!' });
 });

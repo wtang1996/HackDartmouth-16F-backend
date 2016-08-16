@@ -14,6 +14,7 @@ export const createPost = (req, res) => {
   post.tags = req.body.tags.split(' ');
   post.content = req.body.content;
   post.comments = [];
+  post.authorName = req.user.username;
   post.save()
   .then(result => {
     res.json({ message: 'Post created!' });
@@ -36,7 +37,7 @@ export const getPosts = (req, res) => {
 export const getPost = (req, res) => {
   Post.findById(req.params.id)
   .then(post => {
-    res.json({ title: post.title, tags: post.tags.join(), content: post.content, comments: post.comments });
+    res.json({ title: post.title, tags: post.tags.join(), content: post.content, comments: post.comments, author: post.authorName });
   })
   .catch(error => {
     res.json({ error });
@@ -88,9 +89,10 @@ export const updatePost = (req, res) => {
       res.json({ error });
     });
   }
+
   Post.findById(req.params.id)
   .then(post => {
-    res.json({ id: post._id, title: post.title, tags: post.tags.toString(), content: post.content, comments: post.comments });
+    res.json({ id: post._id, title: post.title, tags: post.tags.toString(), content: post.content, comments: post.comments, author: post.authorName });
   })
   .catch(error => {
     res.json({ error });
