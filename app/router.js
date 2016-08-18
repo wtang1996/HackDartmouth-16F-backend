@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import * as Messages from './controllers/message_controller';
 import * as Posts from './controllers/post_controller';
 import * as UserController from './controllers/user_controller';
 import { requireAuth, requireSignin } from './services/passport';
@@ -12,8 +13,28 @@ router.post('/signup', UserController.signup);
 router.get('/profile', requireAuth, UserController.getUser);
 
 router.get('/', (req, res) => {
-  res.json({ message: 'welcome to our blog api!' });
+  res.json({ message: 'welcome to Digup!' });
 });
+
+router.route('/messages/:id')
+  .get((req, res) => {
+    Messages.getMessage(req, res);
+  })
+  .put(requireAuth, (req, res) => {
+    Messages.updateMessage(req, res);
+  })
+  .delete(requireAuth, (req, res) => {
+    Messages.deleteMessage(req, res);
+  });
+
+router.route('/messages')
+  .get((req, res) => {
+    Messages.getMessages(req, res);
+  })
+  .post(requireAuth, (req, res) => {
+    Messages.createMessage(req, res);
+  });
+
 
 router.route('/posts/:id')
   .get((req, res) => {
