@@ -5,8 +5,10 @@ const PostSchema = new Schema({
   title: String,
   tags: [String],
   content: String,
-  comments: [String],
   authorName: String,
+  lost: Boolean,
+  anonymous: Boolean,
+  resolved: Boolean,
 });
 
 // create model class
