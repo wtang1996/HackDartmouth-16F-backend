@@ -2,15 +2,15 @@ import Message from '../models/message_model';
 
 const cleanMessages = (messages) => {
   return messages.map(message => {
-    return { id: message._id, author: message.author, content: message.content };
+    return { id: message._id, user: message.user, content: message.content, time: new Date() };
   });
 };
 
 export const createMessage = (req, res) => {
   const message = new Message();
-  message.user = req.body.user;
+  message.user = 'req.body.user';
   message.content = req.body.content;
-  message.time = null; // retrieve time from request
+  message.time = new Date(); // retrieve time from request
   message.save()
   .then(result => {
     res.json({ message: 'Message created!' });
@@ -83,7 +83,7 @@ export const updateMessage = (req, res) => {
 
   Message.findById(req.params.id)
   .then(message => {
-    res.json({ id: message._id, title: message.title, content: message.content, time: message.time });
+    res.json({ id: message._id, user: message.user, content: message.content, time: message.time });
   })
   .catch(error => {
     res.json({ error });
