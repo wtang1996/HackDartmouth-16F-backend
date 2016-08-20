@@ -10,7 +10,7 @@
     "dev": "nodemon app/server.js --exec babel-node",
     "start": "babel-node app/server.js",
     "build": "babel app -d dist",
-    "prod": "npm run build; node dist/server.js",
+    "prod": "npm run build; node dist/server.js"
   },
   "license": "ISC",
   "dependencies": {
