@@ -33,7 +33,6 @@ export const getMessages = (req, res) => {
 export const getMessage = (req, res) => {
   Message.findById(req.params.id)
   .then(message => {
-    // how to do time?
     res.json({ user: message.user, content: message.content, time: message.time });
   })
   .catch(error => {
@@ -72,10 +71,9 @@ export const updateMessage = (req, res) => {
       res.json({ error });
     });
   }
-  // how to find time
-  if (req.body.time !== []) {
+  if (req.body.time !== '') {
     Message.find().where({ _id: req.params.id })
-    .update({ comments: req.body.time })
+    .update({ time: new Date() })
     .catch(error => {
       res.json({ error });
     });
@@ -83,7 +81,7 @@ export const updateMessage = (req, res) => {
 
   Message.findById(req.params.id)
   .then(message => {
-    res.json({ id: message._id, user: message.user, content: message.content, time: message.time });
+    res.json({ id: message._id, user: message.user, content: message.content, time: new Date() });
   })
   .catch(error => {
     res.json({ error });
