@@ -8,7 +8,7 @@ const cleanMessages = (messages) => {
 
 export const createMessage = (req, res) => {
   const message = new Message();
-  message.user = 'req.body.user';
+  message.user = req.body.user;
   message.content = req.body.content;
   message.time = new Date(); // retrieve time from request
   message.save()
