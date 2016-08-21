@@ -4,7 +4,7 @@ import Post from '../models/post_model';
 // and we purposefully don't return content here either
 const cleanPosts = (posts) => {
   return posts.map(post => {
-    return { id: post._id, title: post.title, tags: post.tags.toString(), anonymous: post.anonymous, lost: post.lost, authorId: post.authorId };
+    return { id: post._id, title: post.title, tags: post.tags.toString(), anonymous: post.anonymous, lost: post.lost, authorId: post.authorId, authorName: post.authorName };
   });
 };
 
@@ -40,7 +40,7 @@ export const getPosts = (req, res) => {
 export const getPost = (req, res) => {
   Post.findById(req.params.id)
   .then(post => {
-    res.json({ title: post.title, tags: post.tags.join(), content: post.content, author: post.authorName, anonymous: post.anonymous, lost: post.lost });
+    res.json({ title: post.title, tags: post.tags.join(), content: post.content, author: post.authorName, anonymous: post.anonymous, lost: post.lost, authorId: post.authorId });
   })
   .catch(error => {
     res.json({ error });
@@ -88,7 +88,7 @@ export const updatePost = (req, res) => {
 
   Post.findById(req.params.id)
   .then(post => {
-    res.json({ id: post._id, title: post.title, tags: post.tags.toString(), content: post.content, author: post.authorName });
+    res.json({ id: post._id, title: post.title, tags: post.tags.toString(), content: post.content, author: post.authorName, authorId: post.authorId });
   })
   .catch(error => {
     res.json({ error });
