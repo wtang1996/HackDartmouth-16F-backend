@@ -12,6 +12,8 @@ router.post('/signup', UserController.signup);
 
 router.get('/profile', requireAuth, UserController.getUser);
 
+router.get('/profile/:id', UserController.getAuthor);
+
 router.get('/', (req, res) => {
   res.json({ message: 'Welcome to Digup!' });
 });

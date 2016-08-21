@@ -6,6 +6,7 @@ const PostSchema = new Schema({
   tags: [String],
   content: String,
   authorName: String,
+  authorId: String,
   lost: Boolean,
   anonymous: Boolean,
   resolved: Boolean,

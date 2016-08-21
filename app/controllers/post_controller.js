@@ -4,7 +4,7 @@ import Post from '../models/post_model';
 // and we purposefully don't return content here either
 const cleanPosts = (posts) => {
   return posts.map(post => {
-    return { id: post._id, title: post.title, tags: post.tags.toString(), anonymous: post.anonymous, lost: post.lost };
+    return { id: post._id, title: post.title, tags: post.tags.toString(), anonymous: post.anonymous, lost: post.lost, authorId: post.authorId };
   });
 };
 
@@ -14,12 +14,13 @@ export const createPost = (req, res) => {
   post.tags = req.body.tags.split(' ');
   post.content = req.body.content;
   post.authorName = req.user.username;
+  post.authorId = req.user._id;
   post.lost = req.body.lost;
   post.anonymous = req.body.anonymous;
   post.resolved = req.body.resolved;
   post.save()
   .then(result => {
-    res.json({ result });
+    res.json({ message: 'Post created!' });
   })
   .catch(error => {
     res.json({ error });
