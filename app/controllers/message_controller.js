@@ -10,7 +10,7 @@ export const createMessage = (req, res) => {
   const message = new Message();
   message.user = req.body.user;
   message.content = req.body.content;
-  message.time = new Date(); // asdf
+  message.time = new Date();
   message.save()
   .then(result => {
     res.json({ message: 'Message created!' });
