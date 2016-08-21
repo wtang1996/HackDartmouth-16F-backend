@@ -19,7 +19,7 @@ export const createPost = (req, res) => {
   post.resolved = req.body.resolved;
   post.save()
   .then(result => {
-    res.json({ message: 'Post created!' });
+    res.json({ result });
   })
   .catch(error => {
     res.json({ error });
