@@ -13,7 +13,7 @@ router.post('/signup', UserController.signup);
 router.get('/profile', requireAuth, UserController.getUser);
 
 router.get('/', (req, res) => {
-  res.json({ message: 'welcome to Digup!' });
+  res.json({ message: 'Welcome to Digup!' });
 });
 
 router.route('/messages/:id')
@@ -23,7 +23,7 @@ router.route('/messages/:id')
   .put((req, res) => {
     Messages.updateMessage(req, res);
   })
-  .delete(requireAuth, (req, res) => {
+  .delete((req, res) => {
     Messages.deleteMessage(req, res);
   });
 
