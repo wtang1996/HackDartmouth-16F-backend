@@ -2,7 +2,7 @@ import Message from '../models/message_model';
 
 const cleanMessages = (messages) => {
   return messages.map(message => {
-    return { id: message._id, user: message.user, content: message.content, time: new Date() };
+    return { id: message._id, user: message.user, content: message.content, time: new Date(), myID: message.myID, userID: message.userID };
   });
 };
 
@@ -11,6 +11,12 @@ export const createMessage = (req, res) => {
   message.user = req.body.user;
   message.content = req.body.content;
   message.time = new Date();
+  message.myID = req.user._id;
+  // front end needs to pass in targetEmail
+  Message.findOne({ email: req.body.targetEmail })
+  .then(user => {
+    res.json({ userID: user._id });
+  });
   message.save()
   .then(result => {
     res.json({ message: 'Message created!' });

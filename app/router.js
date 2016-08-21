@@ -22,10 +22,10 @@ router.route('/messages/:id')
   .get((req, res) => {
     Messages.getMessage(req, res);
   })
-  .put((req, res) => {
+  .put(requireAuth, (req, res) => {
     Messages.updateMessage(req, res);
   })
-  .delete((req, res) => {
+  .delete(requireAuth, (req, res) => {
     Messages.deleteMessage(req, res);
   });
 
@@ -33,7 +33,7 @@ router.route('/messages')
   .get((req, res) => {
     Messages.getMessages(req, res);
   })
-  .post((req, res) => {
+  .post(requireAuth, (req, res) => {
     Messages.createMessage(req, res);
   });
 
