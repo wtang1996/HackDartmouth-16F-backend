@@ -48,13 +48,13 @@ export const signup = (req, res, next) => {
 };
 
 export const getUser = (req, res) => {
-  res.json({ username: req.user.username, email: req.user.email });
+  res.json({ id: req.user._id, username: req.user.username, email: req.user.email });
 };
 
 export const getAuthor = (req, res) => {
   User.findById(req.params.id)
   .then(user => {
-    res.json({ username: user.username, email: user.email });
+    res.json({ id: user._id, username: user.username, email: user.email });
   })
   .catch(error => {
     res.json({ error });
