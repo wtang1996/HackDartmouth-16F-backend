@@ -12,10 +12,9 @@ export const createMessage = (req, res) => {
   message.content = req.body.content;
   message.time = new Date();
   message.myID = req.user._id;
-  // front end needs to pass in targetEmail
   Message.findOne({ email: req.body.targetEmail })
   .then(user => {
-    res.json({ userID: user._id });
+    message.userID = user._id;
   });
   message.save()
   .then(result => {

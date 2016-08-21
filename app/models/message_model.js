@@ -4,7 +4,7 @@ const MessageSchema = new Schema({
   user: String,
   myID: String,
   userID: String,
-  content: String,
+  content: [String],
   time: Date,
 });
 
