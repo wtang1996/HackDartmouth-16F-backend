@@ -40,7 +40,7 @@ export const getPosts = (req, res) => {
 export const getPost = (req, res) => {
   Post.findById(req.params.id)
   .then(post => {
-    res.json({ title: post.title, tags: post.tags.join(), content: post.content, author: post.authorName, anonymous: post.anonymous, lost: post.lost });
+    res.json({ title: post.title, tags: post.tags.join(), content: post.content, author: post.authorName, anonymous: post.anonymous, lost: post.lost, authorId: post.authorId });
   })
   .catch(error => {
     res.json({ error });
