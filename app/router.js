@@ -23,7 +23,7 @@ router.route('/messages/:id')
   .put((req, res) => {
     Messages.updateMessage(req, res);
   })
-  .delete((req, res) => {
+  .delete(requireAuth, (req, res) => {
     Messages.deleteMessage(req, res);
   });
 
