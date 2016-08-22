@@ -22,7 +22,10 @@ export const createMessage = (req, res) => {
       .catch(error => {
         res.json({ error });
       });
-    } });
+    } })
+    .catch(error => {
+      res.json({ error });
+    });
 };
 
 export const getMessages = (req, res) => {
