@@ -6,7 +6,7 @@ const MessageSchema = new Schema({
   myName: String,
   userID: String,
   content: [String],
-  time: Date,
+  anonymouse: Boolean,
 });
 
 const MessageModel = mongoose.model('Message', MessageSchema);
