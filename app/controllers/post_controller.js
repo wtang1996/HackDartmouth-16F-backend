@@ -1,8 +1,10 @@
 import Post from '../models/post_model';
+// const fs = require('fs');
+const AWS = require('aws-sdk');
 
 const cleanPosts = (posts) => {
   return posts.map(post => {
-    return { id: post._id, title: post.title, tags: post.tags.toString(), anonymous: post.anonymous, lost: post.lost, authorId: post.authorId, authorName: post.authorName };
+    return { id: post._id, title: post.title, tags: post.tags.toString(), anonymous: post.anonymous, lost: post.lost, authorId: post.authorId, authorName: post.authorName, key: post.key, pirctureURL: post.pictureURL };
   });
 };
 
@@ -16,11 +18,47 @@ export const createPost = (req, res) => {
   post.lost = req.body.lost;
   post.anonymous = req.body.anonymous;
   post.resolved = req.body.resolved;
+  console.log('CREATE SNAP BODY', req.body);
+  if (req.body.pic) {
+    console.log('in the if statemnet');
+    const x = Math.floor((Math.random() * 10000) + 1);
+    post.key = x.toString();
+
+    const s3bucket = new AWS.S3({ params: { Bucket: 'digup-dartmouth' } });
+
+    AWS.config.update({ region: 'us-west-2' });
+    const params = { Body: req.body.pic, ContentType: 'text/plain', Key: x.toString() };
+    console.log(req.body.pic);
+    s3bucket.upload(params, (err, data) => {
+      if (err) {
+        console.log('Error uploading data: ', err);
+      } else {
+        console.log('Successfully uploaded data to myBucket/myKey');
+      }
+    });
+
+    var s3 = new AWS.S3();//eslint-disable-line
+
+
+    var paramsTwo = { Bucket: 'snap-app-bucket', Key: x.toString() }; //eslint-disable-line
+    s3.getSignedUrl('getObject', paramsTwo, (err, Url) => {
+      post.pictureURL = Url;
+      console.log('The URL is', Url);
+    });
+
+    console.log('\n');
+  } else {
+    post.pictureURL = '';
+    post.key = '';
+  }
+  console.log(post);
   post.save()
   .then(result => {
     res.json({ message: 'Post created!' });
+    console.log('created');
   })
   .catch(error => {
+    console.log('is this is an error');
     res.json({ error });
   });
 };

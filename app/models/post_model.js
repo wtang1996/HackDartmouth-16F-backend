@@ -10,6 +10,8 @@ const PostSchema = new Schema({
   lost: Boolean,
   anonymous: Boolean,
   resolved: Boolean,
+  pictureURL: String,
+  key: String,
 });
 
 // create model class
