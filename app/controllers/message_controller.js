@@ -7,25 +7,25 @@ const cleanMessages = (messages) => {
 };
 
 export const createMessage = (req, res) => {
-  Message.find({ myID: req.user._id, userID: req.body.userID })
-  .then(result => {
-    if (!result) {
-      const message = new Message();
-      message.user = req.body.user;
-      message.content = req.body.content;
-      message.myID = req.user._id;
-      message.userID = req.body.userID;
-      message.save()
-      .then(res => {
-        res.json({ message: 'Message created!' });
-      })
-      .catch(error => {
-        res.json({ error });
-      });
-    } })
-    .catch(error => {
-      res.json({ error });
-    });
+  // Message.find({ myID: req.user._id, userID: req.body.userID })
+  // .then(result => {
+  //   if (!result) {
+  const message = new Message();
+  message.user = req.body.user;
+  message.content = req.body.content;
+  message.myID = req.user._id;
+  message.userID = req.body.userID;
+  message.save()
+  .then(res => {
+    res.json({ message: 'Message created!' });
+  })
+  .catch(error => {
+    res.json({ error });
+  });
+    // } })
+    // .catch(error => {
+    //   res.json({ error });
+    // });
 };
 
 export const getMessages = (req, res) => {
