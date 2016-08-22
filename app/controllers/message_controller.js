@@ -2,6 +2,7 @@ import Message from '../models/message_model';
 
 const cleanMessages = (messages) => {
   return messages.map(message => {
+<<<<<<< HEAD
     return { id: message._id, user: message.user, content: message.content, myID: message.myID }}
 };
 
@@ -12,12 +13,29 @@ export const createMessage = (req, res) => {
   message.time = new Date();
   message.myID = req.user._id;
   message.save()
-  .then(result => {
-    res.json({ message: 'Message created!' });
-  })
-  .catch(error => {
-    res.json({ error });
+=======
+    return { id: message._id, user: message.user, content: message.content, myID: message.myID, userID: message.userID };
   });
+};
+
+export const createMessage = (req, res) => {
+  Message.find({ myID: req.user._id, userID: req.body.userID })
+>>>>>>> 1ade75d55395a0be8903db3b07653023e3b3e9b0
+  .then(result => {
+    if (!result) {
+      const message = new Message();
+      message.user = req.body.user;
+      message.content = req.body.content;
+      message.myID = req.user._id;
+      message.userID = req.body.userID;
+      message.save()
+      .then(res => {
+        res.json({ message: 'Message created!' });
+      })
+      .catch(error => {
+        res.json({ error });
+      });
+    } });
 };
 
 export const getMessages = (req, res) => {
@@ -33,7 +51,7 @@ export const getMessages = (req, res) => {
 export const getMessage = (req, res) => {
   Message.findById(req.params.id)
   .then(message => {
-    res.json({ user: message.user, content: message.content, time: message.time });
+    res.json({ id: message._id, user: message.user, content: message.content, myID: message.myID, userID: message.userID });
   })
   .catch(error => {
     res.json({ error });
@@ -71,17 +89,10 @@ export const updateMessage = (req, res) => {
       res.json({ error });
     });
   }
-  if (req.body.time !== '') {
-    Message.find().where({ _id: req.params.id })
-    .update({ time: new Date() })
-    .catch(error => {
-      res.json({ error });
-    });
-  }
 
   Message.findById(req.params.id)
   .then(message => {
-    res.json({ id: message._id, user: message.user, content: message.content, time: new Date() });
+    res.json({ id: message._id, user: message.user, content: message.content, myID: message.myID, userID: message.userID });
   })
   .catch(error => {
     res.json({ error });
