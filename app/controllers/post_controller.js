@@ -1,21 +1,20 @@
 import Post from '../models/post_model';
 
+// this cleans the posts because we use id instead of dangling _id
+// and we purposefully don't return content here either
 const cleanPosts = (posts) => {
   return posts.map(post => {
-    return { id: post._id, title: post.title, tags: post.tags.toString(), anonymous: post.anonymous, lost: post.lost, authorId: post.authorId, authorName: post.authorName };
+    return { id: post._id, title: post.title, tags: post.tags };
   });
 };
 
 export const createPost = (req, res) => {
   const post = new Post();
   post.title = req.body.title;
-  post.tags = req.body.tags.split(' ');
+  post.tags = req.body.tags;
   post.content = req.body.content;
+  post.comments = [];
   post.authorName = req.user.username;
-  post.authorId = req.user._id;
-  post.lost = req.body.lost;
-  post.anonymous = req.body.anonymous;
-  post.resolved = req.body.resolved;
   post.save()
   .then(result => {
     res.json({ message: 'Post created!' });
@@ -38,7 +37,7 @@ export const getPosts = (req, res) => {
 export const getPost = (req, res) => {
   Post.findById(req.params.id)
   .then(post => {
-    res.json({ title: post.title, tags: post.tags.join(), content: post.content, author: post.authorName, anonymous: post.anonymous, lost: post.lost, authorId: post.authorId });
+    res.json({ title: post.title, tags: post.tags, content: post.content, comments: post.comments, author: post.authorName });
   })
   .catch(error => {
     res.json({ error });
@@ -71,7 +70,7 @@ export const updatePost = (req, res) => {
   }
   if (req.body.tags !== '') {
     Post.find().where({ _id: req.params.id })
-    .update({ tags: req.body.tags.split(' ') })
+    .update({ tags: req.body.tags })
     .catch(error => {
       res.json({ error });
     });
@@ -83,10 +82,17 @@ export const updatePost = (req, res) => {
       res.json({ error });
     });
   }
+  if (req.body.comments !== []) {
+    Post.find().where({ _id: req.params.id })
+    .update({ comments: req.body.comments })
+    .catch(error => {
+      res.json({ error });
+    });
+  }
 
   Post.findById(req.params.id)
   .then(post => {
-    res.json({ id: post._id, title: post.title, tags: post.tags.toString(), content: post.content, author: post.authorName, authorId: post.authorId, lost: post.lost });
+    res.json({ id: post._id, title: post.title, tags: post.tags, content: post.content, comments: post.comments, author: post.authorName });
   })
   .catch(error => {
     res.json({ error });
