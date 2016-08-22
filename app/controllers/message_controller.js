@@ -58,13 +58,6 @@ export const deleteMessage = (req, res) => {
 };
 
 export const updateMessage = (req, res) => {
-  if (req.body.user !== '') {
-    Message.find().where({ _id: req.params.id })
-    .update({ user: req.body.user })
-    .catch(error => {
-      res.json({ error });
-    });
-  }
   if (req.body.content !== '') {
     Message.find().where({ _id: req.params.id })
     .update({ content: req.body.content })
