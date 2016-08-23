@@ -40,7 +40,7 @@ export const createPost = (req, res) => {
     var s3 = new AWS.S3();//eslint-disable-line
 
 
-    var paramsTwo = { Bucket: 'snap-app-bucket', Key: x.toString() }; //eslint-disable-line
+    var paramsTwo = { Bucket: 'digup-dartmouth', Key: x.toString() }; //eslint-disable-line
     s3.getSignedUrl('getObject', paramsTwo, (err, Url) => {
       post.pictureURL = Url;
       console.log('The URL is', Url);
