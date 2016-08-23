@@ -3,7 +3,7 @@ import Message from '../models/message_model';
 const cleanMessages = (messages) => {
   return messages.map(message => {
     return { id: message._id, user: message.user, myName: message.myName,
-      content: message.content, myID: message.myID, userID: message.userID, anonymous: message.anonymous };
+      content: message.content, myID: message.myID, userID: message.userID, anonymous: message.anonymous, anonTitle: message.anonTitle };
   });
 };
 
@@ -15,6 +15,7 @@ export const createMessage = (req, res) => {
   message.userID = req.body.userID;
   message.myName = req.user.username;
   message.anonymous = req.body.anonymous;
+  message.anonTitle = req.body.anonTitle;
   message.save()
   .then(res => {
     res.json({ message: 'Message created!' });
@@ -38,7 +39,7 @@ export const getMessage = (req, res) => {
   Message.findById(req.params.id)
   .then(message => {
     res.json({ id: message._id, user: message.user, content: message.content,
-      myID: message.myID, userID: message.userID, myName: message.myName, anonymous: message.anonymous });
+      myID: message.myID, userID: message.userID, myName: message.myName, anonymous: message.anonymous, anonTitle: message.anonTitle });
   })
   .catch(error => {
     res.json({ error });
@@ -73,7 +74,7 @@ export const updateMessage = (req, res) => {
   Message.findById(req.params.id)
   .then(message => {
     res.json({ id: message._id, user: message.user, content: message.content,
-      myID: message.myID, userID: message.userID, myName: message.myName, anonymous: message.anonymous });
+      myID: message.myID, userID: message.userID, myName: message.myName, anonymous: message.anonymous, anonTitle: message.anonTitle });
   })
   .catch(error => {
     res.json({ error });
