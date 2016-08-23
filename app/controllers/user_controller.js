@@ -82,15 +82,61 @@ export const signup = (req, res, next) => {
 };
 
 export const getUser = (req, res) => {
-  res.json({ id: req.user._id, username: req.user.username, email: req.user.email });
+  console.log('we are here', req.params, req.user);
+  // res.json({ id: req.user._id, username: req.user.username, email: req.user.email });
+  var s3 = new AWS.S3();//eslint-disable-line
+//   console.log('getting post');
+//   Post.findById(req.params.id)
+//       .then(user => {
+//         console.log('through first find');
+  var paramsTwo = { Bucket: 'digup-dartmouth', Key: req.user.key }; //eslint-disable-line
+  s3.getSignedUrl('getObject', paramsTwo, (err, Url) => {
+    console.log('\n\nThe new Signed URL is', Url);
+    res.json({ id: req.user._id, username: req.user.username, email: req.user.email, key: req.user.key, pictureURL: Url });
+          // .then(() => {
+            // Post.findById(req.params.id)
+            //   .then((post2) => {
+            //     console.log('Updated Snaps URL,', post2.pictureURL);
+            //     res.json({ id: req.user._id, username: req.user.username, email: req.user.email, pic: Url });
+            //     console.log('Returned snap with new URL');
+            //   })
+            // .catch(error => {
+            //   res.json({ error });
+            // });
+          // })
+          // .catch(error => {
+//             res.json({ error });
+//           });
+  });
+//       })
+//     .catch(error => {
+//       res.json({ error });
+//     });
+// };
 };
 
 export const getAuthor = (req, res) => {
+  console.log('we are here', req.params);
+    var s3 = new AWS.S3();//eslint-disable-line
+  console.log('getting post');
   User.findById(req.params.id)
-  .then(user => {
-    res.json({ id: user._id, username: user.username, email: user.email });
-  })
-  .catch(error => {
-    res.json({ error });
-  });
+      .then(user => {
+        console.log('through first find');
+        var paramsTwo = { Bucket: 'digup-dartmouth', Key: user.key }; //eslint-disable-line
+        s3.getSignedUrl('getObject', paramsTwo, (err, Url) => {
+          console.log('\n\nThe new Signed URL is', Url);
+          res.json({ id: user._id, username: user.username, email: user.email, key: user.key, pictureURL: Url });
+        });
+      })
+    .catch(error => {
+      res.json({ error });
+    });
+
+  // User.findById(req.params.id)
+  // .then(user => {
+  //   res.json({ id: user._id, username: user.username, email: user.email });
+  // })
+  // .catch(error => {
+  //   res.json({ error });
+  // });
 };
