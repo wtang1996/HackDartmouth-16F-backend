@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 
 // DB Setup
-const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/blog';
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/digup';
 mongoose.connect(mongoURI);
 // set mongoose promises to es6 default
 mongoose.Promise = global.Promise;
