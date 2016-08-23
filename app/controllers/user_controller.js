@@ -2,6 +2,7 @@ import jwt from 'jwt-simple';
 import User from '../models/user_model';
 import dotenv from 'dotenv';
 dotenv.config({ silent: true });
+const AWS = require('aws-sdk');
 
 // encodes a new token for a user object
 function tokenForUser(user) {
@@ -32,6 +33,39 @@ export const signup = (req, res, next) => {
     newUser.email = email;
     newUser.password = password;
     newUser.username = username;
+    console.log('CREATE SNAP BODY', req.body);
+    if (req.body.pic) {
+      console.log('in the if statemnet');
+      const x = Math.floor((Math.random() * 10000) + 1);
+      newUser.key = x.toString();
+
+      const s3bucket = new AWS.S3({ params: { Bucket: 'digup-dartmouth' } });
+
+      AWS.config.update({ region: 'us-west-2' });
+      const params = { Body: req.body.pic, ContentType: 'text/plain', Key: x.toString() };
+      console.log(req.body.pic);
+      s3bucket.upload(params, (err, data) => {
+        if (err) {
+          console.log('Error uploading data: ', err);
+        } else {
+          console.log('Successfully uploaded data to myBucket/myKey');
+        }
+      });
+
+      var s3 = new AWS.S3();//eslint-disable-line
+
+
+      var paramsTwo = { Bucket: 'digup-dartmouth', Key: x.toString() }; //eslint-disable-line
+      s3.getSignedUrl('getObject', paramsTwo, (err, Url) => {
+        newUser.pictureURL = Url;
+        console.log('The URL is', Url);
+      });
+
+      console.log('\n');
+    } else {
+      newUser.pictureURL = '';
+      newUser.key = '';
+    }
     newUser.save()
     .then(result => {
       res.json({ message: 'User created!' });

@@ -8,6 +8,11 @@ const cleanPosts = (posts) => {
   });
 };
 
+const cleanPost = (post) => {
+  return { id: post._id, title: post.title, tags: post.tags.toString(), anonymous: post.anonymous, lost: post.lost, authorId: post.authorId, authorName: post.authorName, key: post.key, pictureURL: post.pictureURL };
+};
+
+
 export const createPost = (req, res) => {
   const post = new Post();
   post.title = req.body.title;
@@ -74,10 +79,33 @@ export const getPosts = (req, res) => {
 };
 
 export const getPost = (req, res) => {
+  var s3 = new AWS.S3();//eslint-disable-line
+  console.log('getting post');
   Post.findById(req.params.id)
-  .then(post => {
-    res.json({ title: post.title, tags: post.tags.join(), content: post.content, author: post.authorName, anonymous: post.anonymous, lost: post.lost, authorId: post.authorId });
-  })
+    .then(post => {
+      console.log('through first find');
+      var paramsTwo = { Bucket: 'digup-dartmouth', Key: post.key }; //eslint-disable-line
+      s3.getSignedUrl('getObject', paramsTwo, (err, Url) => {
+        console.log('\n\nThe new Signed URL is', Url);
+
+        Post.findOneAndUpdate({ _id: req.params.id }, {
+          pictureURL: Url,
+        }).then(() => {
+          Post.findById(req.params.id)
+            .then((post2) => {
+              console.log('Updated Snaps URL,', post2.pictureURL);
+              res.json(cleanPost(post2));
+              console.log('Returned snap with new URL');
+            })
+          .catch(error => {
+            res.json({ error });
+          });
+        })
+        .catch(error => {
+          res.json({ error });
+        });
+      });
+    })
   .catch(error => {
     res.json({ error });
   });
