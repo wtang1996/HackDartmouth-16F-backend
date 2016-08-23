@@ -11,7 +11,7 @@ const cleanPosts = (posts) => {
 };
 
 const cleanPost = (post) => {
-  return { id: post._id, title: post.title, tags: post.tags.toString(), anonymous: post.anonymous, lost: post.lost, authorId: post.authorId, authorName: post.authorName, key: post.key, pictureURL: post.pictureURL };
+  return { id: post._id, title: post.title, tags: post.tags, anonymous: post.anonymous, lost: post.lost, authorId: post.authorId, authorName: post.authorName, key: post.key, pictureURL: post.pictureURL };
 };
 
 
