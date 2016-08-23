@@ -4,7 +4,7 @@ import Post from '../models/post_model';
 // and we purposefully don't return content here either
 const cleanPosts = (posts) => {
   return posts.map(post => {
-    return { id: post._id, title: post.title, tags: post.tags };
+    return { id: post._id, title: post.title, tags: post.tags, type: post.type };
   });
 };
 
@@ -12,6 +12,7 @@ export const createPost = (req, res) => {
   const post = new Post();
   post.title = req.body.title;
   post.tags = req.body.tags;
+  post.type = req.body.type;
   post.content = req.body.content;
   post.comments = [];
   post.authorName = req.user.username;
@@ -37,7 +38,7 @@ export const getPosts = (req, res) => {
 export const getPost = (req, res) => {
   Post.findById(req.params.id)
   .then(post => {
-    res.json({ title: post.title, tags: post.tags, content: post.content, comments: post.comments, author: post.authorName });
+    res.json({ title: post.title, tags: post.tags, content: post.content, type: post.type, comments: post.comments, author: post.authorName });
   })
   .catch(error => {
     res.json({ error });

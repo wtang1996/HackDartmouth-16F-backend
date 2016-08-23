@@ -7,7 +7,7 @@ const PostSchema = new Schema({
   content: String,
   authorName: String,
   authorId: String,
-  lost: Boolean,
+  lost: String,
   anonymous: Boolean,
   resolved: Boolean,
 });
