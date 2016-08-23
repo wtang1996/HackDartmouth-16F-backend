@@ -57,6 +57,4 @@ router.route('/posts')
     Posts.createPost(req, res);
   });
 
-// /your routes will go here
-
 export default router;

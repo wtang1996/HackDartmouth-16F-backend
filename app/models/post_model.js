@@ -8,8 +8,11 @@ const PostSchema = new Schema({
   authorName: String,
   authorId: String,
   lost: String,
+  type: String,
   anonymous: Boolean,
   resolved: Boolean,
+  pictureURL: String,
+  key: String,
 });
 
 // create model class

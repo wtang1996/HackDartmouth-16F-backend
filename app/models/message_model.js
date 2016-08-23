@@ -3,9 +3,11 @@ import mongoose, { Schema } from 'mongoose';
 const MessageSchema = new Schema({
   user: String,
   myID: String,
+  myName: String,
   userID: String,
   content: [String],
-  time: Date,
+  anonymous: Boolean,
+  anonTitle: String,
 });
 
 const MessageModel = mongoose.model('Message', MessageSchema);
