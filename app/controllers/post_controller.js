@@ -6,9 +6,14 @@ const AWS = require('aws-sdk');
 // and we purposefully don't return content here either
 const cleanPosts = (posts) => {
   return posts.map(post => {
-    return { id: post._id, title: post.title, tags: post.tags, type: post.type, anonymous: post.anonymous, lost: post.lost, authorId: post.authorId, authorName: post.authorName, key: post.key, pirctureURL: post.pictureURL };
+    return { id: post._id, title: post.title, tags: post.tags, type: post.type, anonymous: post.anonymous, lost: post.lost, authorId: post.authorId, authorName: post.authorName, key: post.key, pictureURL: post.pictureURL };
   });
 };
+
+const cleanPost = (post) => {
+  return { id: post._id, title: post.title, tags: post.tags.toString(), anonymous: post.anonymous, lost: post.lost, authorId: post.authorId, authorName: post.authorName, key: post.key, pictureURL: post.pictureURL };
+};
+
 
 export const createPost = (req, res) => {
   const post = new Post();
@@ -79,10 +84,33 @@ export const getPosts = (req, res) => {
 };
 
 export const getPost = (req, res) => {
+  var s3 = new AWS.S3();//eslint-disable-line
+  console.log('getting post');
   Post.findById(req.params.id)
-  .then(post => {
-    res.json({ title: post.title, tags: post.tags, content: post.content, type: post.type, comments: post.comments, author: post.authorName });
-  })
+    .then(post => {
+      console.log('through first find');
+      var paramsTwo = { Bucket: 'digup-dartmouth', Key: post.key }; //eslint-disable-line
+      s3.getSignedUrl('getObject', paramsTwo, (err, Url) => {
+        console.log('\n\nThe new Signed URL is', Url);
+
+        Post.findOneAndUpdate({ _id: req.params.id }, {
+          pictureURL: Url,
+        }).then(() => {
+          Post.findById(req.params.id)
+            .then((post2) => {
+              console.log('Updated Snaps URL,', post2.pictureURL);
+              res.json(cleanPost(post2));
+              console.log('Returned snap with new URL');
+            })
+          .catch(error => {
+            res.json({ error });
+          });
+        })
+        .catch(error => {
+          res.json({ error });
+        });
+      });
+    })
   .catch(error => {
     res.json({ error });
   });
