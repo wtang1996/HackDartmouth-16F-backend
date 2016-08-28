@@ -26,14 +26,65 @@ Profile
 ![profile](/img/Profile.png)
 
 ## Architecture
-Using Travis Cl to run automatic linting and automatic pushes to surge, Eslint with Airbnb config, and git-hooks to reduce the chances of accidentally ruining the repositories.
-
 
 TODO:  descriptions of code organization and tools and libraries used
 
+Using Travis Cl to run automatic linting and automatic pushes to surge, Eslint with Airbnb config, and git-hooks to reduce the chances of accidentally ruining the repositories.
+
+
+
+
+
+
+Libraries used in the front end:
+
+`   "axios": "^0.13.1",
+    "dropzone": "^4.3.0",
+    "immutable": "^3.8.1",
+    "jquery": "^3.1.0",
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1",
+    "react-dropzone": "^3.5.3",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.5.2",
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.1.0"`
+
+Libraries used in the back end:
+
+`    "aws-sdk": "^2.5.2",
+    "babel-cli": "^6.11.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-2": "^6.11.0",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.2",
+    "cors": "^2.7.1",
+    "dotenv": "^2.0.0",
+    "express": "^4.14.0",
+    "jwt-simple": "^0.5.0",
+    "mongoose": "^4.5.8",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.1.0",
+    "passport-local": "^1.0.0"`
+
+
 ## Setup
 
-TODO: how to get the project dev environment up and running, npm install etc
+### Front End Dev Environment
+
+First, run `npm install` to fetch all the webpack dependencies.
+Then `npm start` will start the front end website on http://localhost:8080.
+
+### Back End Dev Environment
+
+`npm run dev` will start the backend app on http://localhost:9090 in dev reloading mode.
+
+Remember to change the server api url
+`// const ROOT_URL = 'https://digup.herokuapp.com/api';
+ const ROOT_URL = 'http://localhost:9090/api';`
+
+Also run the `mongod &` process in background, which the node app will connect to.
+
 
 ## Deployment
 
