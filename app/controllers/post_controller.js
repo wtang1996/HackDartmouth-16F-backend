@@ -24,9 +24,7 @@ export const createPost = (req, res) => {
   post.lost = req.body.lost;
   post.anonymous = req.body.anonymous;
   post.resolved = req.body.resolved;
-  console.log('CREATE SNAP BODY', req.body);
   if (req.body.pic) {
-    console.log('in the if statemnet');
     const x = Math.floor((Math.random() * 10000) + 1);
     post.key = x.toString();
 
@@ -34,7 +32,6 @@ export const createPost = (req, res) => {
 
     AWS.config.update({ region: 'us-west-2' });
     const params = { Body: req.body.pic, ContentType: 'text/plain', Key: x.toString() };
-    console.log(req.body.pic);
     s3bucket.upload(params, (err, data) => {
       if (err) {
         console.log('Error uploading data: ', err);
@@ -95,9 +92,7 @@ export const getPost = (req, res) => {
           }).then(() => {
             Post.findById(req.params.id)
               .then((post2) => {
-                console.log('Updated Snaps URL,', post2.pictureURL);
                 res.json(cleanPost(post2));
-                console.log('Returned snap with new URL');
               })
             .catch(error => {
               res.json({ error });
