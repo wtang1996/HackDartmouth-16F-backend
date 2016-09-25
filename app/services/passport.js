@@ -17,7 +17,7 @@ const localOptions = { usernameField: 'email' };
 // so passport can find it there
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-  secretOrKey: process.env.API_SECRET,
+  secretOrKey: 'somerweklhjhdf9879av8v928cjka asdflkaj889',
 };
 
 const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
